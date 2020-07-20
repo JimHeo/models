@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-""" Tests for Model Helper functions."""
+"""Tests for Model Helper functions."""
 
 from __future__ import absolute_import
 from __future__ import division
@@ -25,6 +25,10 @@ from official.utils.misc import model_helpers
 
 class PastStopThresholdTest(tf.test.TestCase):
   """Tests for past_stop_threshold."""
+
+  def setUp(self):
+    super(PastStopThresholdTest, self).setUp()
+    tf.compat.v1.disable_eager_execution()
 
   def test_past_stop_threshold(self):
     """Tests for normal operating conditions."""
@@ -77,7 +81,7 @@ class SyntheticDataTest(tf.test.TestCase):
                                               label_value=456,
                                               label_dtype=tf.int32)).get_next()
 
-    with self.test_session() as sess:
+    with self.session() as sess:
       for n in range(5):
         inp, lab = sess.run((input_element, label_element))
         self.assertAllClose(inp, [123., 123., 123., 123., 123.])
@@ -92,7 +96,7 @@ class SyntheticDataTest(tf.test.TestCase):
     element = tf.compat.v1.data.make_one_shot_iterator(d).get_next()
     self.assertFalse(isinstance(element, tuple))
 
-    with self.test_session() as sess:
+    with self.session() as sess:
       inp = sess.run(element)
       self.assertAllClose(inp, [43.5, 43.5, 43.5, 43.5])
 
@@ -110,7 +114,7 @@ class SyntheticDataTest(tf.test.TestCase):
     self.assertIn('d', element['b'])
     self.assertNotIn('c', element)
 
-    with self.test_session() as sess:
+    with self.session() as sess:
       inp = sess.run(element)
       self.assertAllClose(inp['a'], [1.1, 1.1])
       self.assertAllClose(inp['b']['c'], [1.1, 1.1, 1.1])
