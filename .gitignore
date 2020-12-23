@@ -96,3 +96,10 @@ ENV/
 
 # For mac
 .DS_Store
+
+# VSCode
+.vscode
+
+# Dataset
+pascal_voc_seg
+kits19
